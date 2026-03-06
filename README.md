@@ -1,4 +1,4 @@
->[Tip]
+> [!TIP]
 > [ZeroStudio](https://github.com/msmt2018/ZeroStudio/tree/main/editor/tree-sitter-ndk)
 > The build process has been converted to Gradle + NDK + CMake. 
 See the link above for details. This project only provides an AAR file.

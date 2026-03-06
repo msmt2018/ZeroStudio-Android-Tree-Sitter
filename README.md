@@ -1,6 +1,6 @@
 >[+Build Source]
 > [ZeroStudio](https://github.com/msmt2018/ZeroStudio/tree/main/editor/tree-sitter-ndk)
-> THIS PROJECT IS NOT MAINTAINED ANYMORE. 
+> The build process has been converted to Gradle + NDK + CMake. See the link above for details. This project only provides an AAR file.
 
 # android-tree-sitter
 

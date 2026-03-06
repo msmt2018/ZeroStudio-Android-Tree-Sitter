@@ -1,0 +1,264 @@
+================================================================================
+OPERATORS: Unary Operators
+================================================================================
+
+select
+    +1,
+    -1,
+    ~1,
+    NOT TRUE,
+    null IS NOT TRUE,
+    false IS FALSE,
+    hoge IS NULL
+;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (number))
+          (select_expression
+            (number))
+          (select_expression
+            (unary_expression
+              (number)))
+          (select_expression
+            (unary_expression
+              (TRUE)))
+          (select_expression
+            (unary_expression
+              (NULL)
+              (TRUE)))
+          (select_expression
+            (unary_expression
+              (FALSE)
+              (FALSE)))
+          (select_expression
+            (unary_expression
+              (identifier)
+              (NULL))))))))
+
+================================================================================
+OPERATORS: Binary Operators
+================================================================================
+
+select
+    1 - 2 * 3 / 10,
+    "string1" || hoge2,
+    (2 << 4) >> 2,
+    TRUE AND NOT (null is true)
+    ;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (binary_expression
+              (number)
+              (binary_expression
+                (binary_expression
+                  (number)
+                  (number))
+                (number))))
+          (select_expression
+            (binary_expression
+              (string)
+              (identifier)))
+          (select_expression
+            (binary_expression
+              (binary_expression
+                (number)
+                (number))
+              (number)))
+          (select_expression
+            (binary_expression
+              (TRUE)
+              (unary_expression
+                (unary_expression
+                  (NULL)
+                  (TRUE))))))))))
+
+================================================================================
+OPERATORS: EXISTS operator
+================================================================================
+
+SELECT EXISTS ( SELECT value FROM Words WHERE direction = 'south' ) as result;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (unary_expression
+              (select_subexpression
+                (query_expr
+                  (select
+                    (select_list
+                      (select_expression
+                        (identifier)))
+                    (from_clause
+                      (from_item
+                        (identifier)))
+                    (where_clause
+                      (binary_expression
+                        (identifier)
+                        (string)))))))
+            (as_alias
+              (identifier))))))))
+
+================================================================================
+OPERATORS: Function Calls
+================================================================================
+
+SELECT
+  A(1),
+  COUNT(DISTINCT 1, 2, 3 ignore nulls order by hoge limit 10),
+  EXTRACT(YEAR FROM NOW()),
+  ANY_VALUE(year HAVING MAX inches) AS max_any_year,
+  ANY_VALUE(year HAVING MIN inches * inchces) AS min_any_year,
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (function_call
+              (identifier)
+              (argument
+                (number))))
+          (select_expression
+            (function_call
+              (identifier)
+              (distinct)
+              (argument
+                (number))
+              (argument
+                (number))
+              (argument
+                (number))
+              (order_by_clause
+                (order_by_clause_body
+                  (identifier)))
+              (limit_clause)))
+          (select_expression
+            (function_call
+              (identifier)
+              (datetime_part)
+              (function_call
+                (identifier))))
+          (select_expression
+            (function_call
+              (identifier)
+              (argument
+                (identifier))
+              (having_max_clause
+                (having_expression
+                  (identifier))))
+            (as_alias
+              (identifier)))
+          (select_expression
+            (function_call
+              (identifier)
+              (argument
+                (identifier))
+              (having_min_clause
+                (having_expression
+                  (binary_expression
+                    (identifier)
+                    (identifier)))))
+            (as_alias
+              (identifier))))))))
+
+================================================================================
+OPERATORS: JSON Functions
+================================================================================
+
+SELECT
+  INT64(json_number),
+  FLOAT64(json_number)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (function_call
+              (identifier)
+              (argument
+                (identifier))))
+          (select_expression
+            (function_call
+              (identifier)
+              (argument
+                (identifier)))))))))
+
+================================================================================
+OPERATORS: Quantitive LIKE operator
+================================================================================
+
+WITH Words AS
+ (SELECT 'Intend with clarity.' as value UNION ALL
+  SELECT 'Secure with intention.' UNION ALL
+  SELECT 'Clarity and security.')
+SELECT * FROM Words WHERE value LIKE ANY ('Intend%', '%intention%');
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (cte_clause
+        (cte
+          (identifier)
+          (query_expr
+            (set_operation
+              (query_expr
+                (select
+                  (select_list
+                    (select_expression
+                      (string)
+                      (as_alias
+                        (identifier))))))
+              (query_expr
+                (set_operation
+                  (query_expr
+                    (select
+                      (select_list
+                        (select_expression
+                          (string)))))
+                  (query_expr
+                    (select
+                      (select_list
+                        (select_expression
+                          (string)))))))))))
+      (select
+        (select_list
+          (select_all
+            (asterisk_expression)))
+        (from_clause
+          (from_item
+            (identifier)))
+        (where_clause
+          (binary_expression
+            (identifier)
+            (quantitve_like_operator)
+            (quantitve_like_patterns
+              (like_pattern)
+              (like_pattern))))))))

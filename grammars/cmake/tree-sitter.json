@@ -1,0 +1,36 @@
+{
+  "grammars": [
+    {
+      "name": "cmake",
+      "camelcase": "Cmake",
+      "scope": "source.cmake",
+      "path": ".",
+      "file-types": [
+        "cmake",
+        "CMakeLists.txt"
+      ],
+      "highlights": "queries/highlights.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.7.2",
+    "license": "MIT",
+    "description": "CMake grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Uy Ha"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/uyha/tree-sitter-cmake"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true
+  }
+}

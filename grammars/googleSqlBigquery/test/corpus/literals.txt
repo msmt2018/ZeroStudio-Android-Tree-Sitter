@@ -1,0 +1,509 @@
+================================================================================
+LITERALS: basic identifier
+================================================================================
+
+select
+  _5bc.dataField,
+ `5abc`.dataField,
+ `GROUP`.dataField,
+ abc5.GROUP,
+ `!@#$%^&*(_+|)|}{":?><`
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (identifier))
+          (select_expression
+            (identifier))
+          (select_expression
+            (identifier))
+          (select_expression
+            (identifier))
+          (select_expression
+            (identifier)))))))
+
+================================================================================
+LITERALS: String literals
+================================================================================
+
+select
+ "",
+ "double quote",
+ 'single "quote',
+ '''triple quoted''',
+ """
+ triple quoted
+ """
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (string))
+          (select_expression
+            (string))
+          (select_expression
+            (string))
+          (select_expression
+            (string))
+          (select_expression
+            (string)))))))
+
+================================================================================
+LITERALS: NUMERIC literals
+================================================================================
+
+select
+  NUMERIC '0',
+  NUMERIC '123456',
+  NUMERIC '-3.14',
+  NUMERIC '-0.54321',
+  NUMERIC '1.23456e05',
+  NUMERIC '-9.876e-3',
+  BIGNUMERIC '0',
+  BIGNUMERIC '123456',
+  BIGNUMERIC '-3.14',
+  BIGNUMERIC '-0.54321',
+  BIGNUMERIC '1.23456e05',
+  BIGNUMERIC '-9.876e-3'
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (number
+              (numeric)))
+          (select_expression
+            (number
+              (numeric)))
+          (select_expression
+            (number
+              (numeric)))
+          (select_expression
+            (number
+              (numeric)))
+          (select_expression
+            (number
+              (numeric)))
+          (select_expression
+            (number
+              (numeric)))
+          (select_expression
+            (number
+              (numeric)))
+          (select_expression
+            (number
+              (numeric)))
+          (select_expression
+            (number
+              (numeric)))
+          (select_expression
+            (number
+              (numeric)))
+          (select_expression
+            (number
+              (numeric)))
+          (select_expression
+            (number
+              (numeric))))))))
+
+================================================================================
+LITERALS: Floating point
+================================================================================
+
+select
+  123.456e-67,
+  .1E4,
+  58.,
+  4e2
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (number))
+          (select_expression
+            (number))
+          (select_expression
+            (number))
+          (select_expression
+            (number)))))))
+
+================================================================================
+LITERALS: Array literals
+================================================================================
+
+select
+  [1, 2, 3],
+  ['x', 'y', 'xy'],
+  ARRAY[1, 2, 3],
+  ARRAY<string>['x', 'y', 'xy'],
+  ARRAY<int64>[],
+  ARRAY<struct<x INT64, y STRING>>[],
+  [],
+  ARRAY(select 1),
+  [ifnull(1, 0), 2],
+  [ifnull(1, 0), 2][safe_offset(0)]
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (array
+              (number)
+              (number)
+              (number)))
+          (select_expression
+            (array
+              (string)
+              (string)
+              (string)))
+          (select_expression
+            (array
+              (number)
+              (number)
+              (number)))
+          (select_expression
+            (array
+              (string)
+              (string)
+              (string)))
+          (select_expression
+            (array))
+          (select_expression
+            (array))
+          (select_expression
+            (array))
+          (select_expression
+            (function_call
+              (select_subexpression
+                (query_expr
+                  (select
+                    (select_list
+                      (select_expression
+                        (number))))))))
+          (select_expression
+            (array
+              (function_call
+                (identifier)
+                (argument
+                  (number))
+                (argument
+                  (number)))
+              (number)))
+          (select_expression
+            (element_access
+              (array
+                (function_call
+                  (identifier)
+                  (argument
+                    (number))
+                  (argument
+                    (number)))
+                (number))
+              (function_call
+                (identifier)
+                (argument
+                  (number))))))))))
+
+================================================================================
+LITERALS: Struct literals
+================================================================================
+
+select
+  (1, 2, 3),
+  (1, 'abc'),
+  STRUCT(1 AS foo, 'abc' AS bar),
+  STRUCT<INT32, INT64>(1, 2),
+  STRUCT(1),
+  STRUCT<INT64>(1),
+  STRUCT<x struct<INT64>>(1),
+  STRUCT<x struct<INT64>>(1),
+  STRUCT<x struct<ARRAY<string>>>(null),
+  STRUCT("hoge" as id)  .  id
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (struct
+              (number)
+              (number)
+              (number)))
+          (select_expression
+            (struct
+              (number)
+              (string)))
+          (select_expression
+            (struct
+              (number)
+              (as_alias
+                (identifier))
+              (string)
+              (as_alias
+                (identifier))))
+          (select_expression
+            (struct
+              (number)
+              (number)))
+          (select_expression
+            (struct
+              (number)))
+          (select_expression
+            (struct
+              (number)))
+          (select_expression
+            (struct
+              (number)))
+          (select_expression
+            (struct
+              (number)))
+          (select_expression
+            (struct
+              (NULL)))
+          (select_expression
+            (field_access
+              (struct
+                (string)
+                (as_alias
+                  (identifier)))
+              (identifier))))))))
+
+================================================================================
+LITERALS: DATE/TIME/DATETIME/TIMESTAMP/INTERVAL literals
+================================================================================
+
+select
+  DATE '2014-09-27',
+  TIME '12:30:00.45',
+  DATETIME '2014-09-27 12:30:00.45',
+  TIMESTAMP '2014-09-27 12:30:00.45-08',
+  DATE('2014-09-27'),
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (time
+              (string)))
+          (select_expression
+            (time
+              (string)))
+          (select_expression
+            (time
+              (string)))
+          (select_expression
+            (time
+              (string)))
+          (select_expression
+            (function_call
+              (identifier)
+              (argument
+                (string)))))))))
+
+================================================================================
+LITERALS: DATE/TIME/DATETIME/TIMESTAMP/INTERVAL literals as identifier
+================================================================================
+
+SELECT
+  DATE,
+  TIME,
+  DATETIME,
+  TIMESTAMP,
+FROM `dataset.table`
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (identifier))
+          (select_expression
+            (identifier))
+          (select_expression
+            (identifier))
+          (select_expression
+            (identifier)))
+        (from_clause
+          (from_item
+            (identifier)))))))
+
+================================================================================
+LITERALS: INTERVAL literals
+================================================================================
+
+select
+  INTERVAL '5' DAY,
+  INTERVAL param.num DAY,
+  INTERVAL '0.001' SECOND,
+  INTERVAL '10:20:30' HOUR TO SECOND,
+  INTERVAL '1-2' YEAR TO MONTH,
+  INTERVAL '1 15' MONTH TO DAY
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (interval
+              (string)
+              (datetime_part)))
+          (select_expression
+            (interval
+              (identifier)
+              (datetime_part)))
+          (select_expression
+            (interval
+              (string)
+              (datetime_part)))
+          (select_expression
+            (interval
+              (string)
+              (datetime_part)
+              (datetime_part)))
+          (select_expression
+            (interval
+              (string)
+              (datetime_part)
+              (datetime_part)))
+          (select_expression
+            (interval
+              (string)
+              (datetime_part)
+              (datetime_part))))))))
+
+================================================================================
+LITERALS: RANGE literal
+================================================================================
+
+SELECT
+  RANGE<DATE> '[2022-01-01, 2023-01-01)',
+  RANGE(DATE '2022-12-01', DATE '2022-12-31') AS results;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (range
+              (range_type)
+              (string)))
+          (select_expression
+            (function_call
+              (identifier)
+              (time
+                (string))
+              (time
+                (string)))
+            (as_alias
+              (identifier))))))))
+
+================================================================================
+LITERALS: FUNCTION_CALL
+================================================================================
+
+select parse_json('{}', wide_number_mode => 'exact')
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (function_call
+              (identifier)
+              (argument
+                (string))
+              (argument
+                (identifier)
+                (string)))))))))
+
+================================================================================
+LITERALS: JSON
+================================================================================
+
+select
+  JSON '{"fuga": 2}',
+  (JSON '{"hoge": 2}')["hoge"],
+  JSON '{"hoge": 2}'.hoge
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (json
+              (string)))
+          (select_expression
+            (element_access
+              (json
+                (string))
+              (string)))
+          (select_expression
+            (field_access
+              (json
+                (string))
+              (identifier))))))))
+
+================================================================================
+LITERALS: Query parameter
+================================================================================
+
+select
+  @user_used,
+  @@system_used
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (query_parameter))
+          (select_expression
+            (system_variable)))))))

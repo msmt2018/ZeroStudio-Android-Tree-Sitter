@@ -113,7 +113,7 @@ static jlong TSLanguage${capitalizedName()}_getInstance(JNIEnv *env, jclass claz
     return (jlong) tree_sitter_${name}();
 }
 
-void TSLanguage${capitalizedName()}_Native__SetJniMethods(JNINativeMethod *methods, int count) {
+void TSLanguage${capitalizedName()}_Native_SetJniMethods(JNINativeMethod *methods, int count) {
   SET_JNI_METHOD(methods, TSLanguage${capitalizedName()}_Native_getInstance, TSLanguage${capitalizedName()}_getInstance);
 }
 

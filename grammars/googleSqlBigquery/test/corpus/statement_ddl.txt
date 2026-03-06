@@ -1,0 +1,1216 @@
+================================================================================
+DDL: SCHEMA with options
+================================================================================
+
+CREATE SCHEMA mydataset OPTIONS();
+CREATE SCHEMA mydataset
+OPTIONS(
+  location="hoge",
+  labels=[("label1","value1"),("label2","value2")]
+);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_schema_statement
+    (identifier)
+    (option_clause))
+  (create_schema_statement
+    (identifier)
+    (option_clause
+      (option_item
+        (identifier)
+        (string))
+      (option_item
+        (identifier)
+        (array
+          (struct
+            (string)
+            (string))
+          (struct
+            (string)
+            (string)))))))
+
+================================================================================
+DDL: SCHEMA IF NOT EXISTS
+================================================================================
+
+CREATE SCHEMA IF NOT EXISTS mydataset
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_schema_statement
+    (keyword_if_not_exists)
+    (identifier)))
+
+================================================================================
+DDL: CREATE TABLE
+================================================================================
+
+CREATE TABLE my_table (col1 INT64);
+CREATE OR REPLACE TABLE my_table (col1 INT64);
+CREATE TABLE IF NOT EXISTS my_table (col1 INT64);
+CREATE TEMPORARY TABLE IF NOT EXISTS my_table (col1 INT64);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type))))
+  (create_table_statement
+    (keyword_replace)
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type))))
+  (create_table_statement
+    (keyword_if_not_exists)
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type))))
+  (create_table_statement
+    (keyword_temporary)
+    (keyword_if_not_exists)
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type)))))
+
+================================================================================
+DDL: CREATE TABLE CLONE
+================================================================================
+
+CREATE TABLE `myproject.mydataset.mytable`
+CLONE `myproject.mydataset.mytablesnapshot`
+OPTIONS(
+  expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 365 DAY),
+  friendly_name="my_table",
+  description="A table that expires in 1 year",
+  labels=[("org_unit", "development")]
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_clone_statement
+    (identifier)
+    (clone_clause
+      (identifier))
+    (option_clause
+      (option_item
+        (identifier)
+        (function_call
+          (identifier)
+          (argument
+            (function_call
+              (identifier)))
+          (argument
+            (interval
+              (number)
+              (datetime_part)))))
+      (option_item
+        (identifier)
+        (string))
+      (option_item
+        (identifier)
+        (string))
+      (option_item
+        (identifier)
+        (array
+          (struct
+            (string)
+            (string)))))))
+
+================================================================================
+DDL: CREATE SNAPSHOT TABLE
+================================================================================
+
+CREATE SNAPSHOT TABLE IF NOT EXISTS `sandbox.sample_table-2022-09-06T21_45_13`
+CLONE `sandbox.sample_table`
+FOR SYSTEM_TIME AS OF timestamp '2022-01-01'
+OPTIONS(
+  expiration_timestamp=TIMESTAMP "2022-10-06T12:45:28.168Z"
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_snapshot_table_statement
+    (keyword_if_not_exists)
+    (identifier)
+    (clone_clause
+      (identifier))
+    (system_time_clause
+      (time
+        (string)))
+    (option_clause
+      (option_item
+        (identifier)
+        (time
+          (string))))))
+
+================================================================================
+DDL: CREATE TABLE with table options
+================================================================================
+
+CREATE TABLE my_table (timestamp TIMESTAMP)
+PARTITION BY DATE(timestamp);
+
+CREATE TABLE my_table (timestamp TIMESTAMP)
+PARTITION BY date;
+
+CREATE TABLE my_table (col1 INT, col2 INT)
+CLUSTER BY col1, col2;
+
+CREATE TABLE my_table (col1 INT)
+OPTIONS(description="text description");
+
+CREATE TABLE IF NOT EXISTS `hoge.my_table`
+COPY `bigquery-public-data.austin_311.311_service_requests`;
+
+CREATE TABLE IF NOT EXISTS `hoge.my_table`
+LIKE `bigquery-public-data.austin_311.311_service_requests`
+AS SELECT * FROM mydataset.myothertable;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type)))
+    (table_partition_clause
+      (partition_expression
+        (function_call
+          (identifier)
+          (argument
+            (identifier))))))
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type)))
+    (table_partition_clause
+      (partition_expression
+        (identifier))))
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type))
+      (column_definition
+        (identifier)
+        (column_type)))
+    (table_cluster_clause
+      (identifier)
+      (identifier)))
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type)))
+    (option_clause
+      (option_item
+        (identifier)
+        (string))))
+  (create_table_copy_statement
+    (keyword_if_not_exists)
+    (identifier)
+    (copy_clause
+      (identifier)))
+  (create_table_like_statement
+    (keyword_if_not_exists)
+    (identifier)
+    (like_clause
+      (identifier))
+    (query_statement
+      (query_expr
+        (select
+          (select_list
+            (select_all
+              (asterisk_expression)))
+          (from_clause
+            (from_item
+              (identifier))))))))
+
+================================================================================
+DDL: CREATE TABLE with SELECT
+================================================================================
+
+CREATE TABLE my_table AS SELECT "2022-01-01";
+CREATE TABLE my_table(date DATE) AS SELECT "2022-01-01";
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_statement
+    (identifier)
+    (query_statement
+      (query_expr
+        (select
+          (select_list
+            (select_expression
+              (string)))))))
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type)))
+    (query_statement
+      (query_expr
+        (select
+          (select_list
+            (select_expression
+              (string))))))))
+
+================================================================================
+DDL: CREATE TABLE on BigQuery Examples #1
+================================================================================
+
+CREATE TABLE mydataset.newtable
+(
+  x INT64 OPTIONS(description="An optional INTEGER field"),
+  y STRUCT<
+    a ARRAY<STRING> OPTIONS(description="A repeated STRING field"),
+    b BOOL
+  >
+)
+PARTITION BY _PARTITIONDATE
+OPTIONS(
+  expiration_timestamp=TIMESTAMP "2025-01-01 00:00:00 UTC",
+  partition_expiration_days=1,
+  description="a table that expires in 2025, with each partition living for 24 hours",
+  labels=[("org_unit", "development")]
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type)
+        (option_clause
+          (option_item
+            (identifier)
+            (string))))
+      (column_definition
+        (identifier)
+        (column_type
+          (column_definition
+            (identifier)
+            (column_type)
+            (option_clause
+              (option_item
+                (identifier)
+                (string))))
+          (column_definition
+            (identifier)
+            (column_type)))))
+    (table_partition_clause
+      (partition_expression))
+    (option_clause
+      (option_item
+        (identifier)
+        (time
+          (string)))
+      (option_item
+        (identifier)
+        (number))
+      (option_item
+        (identifier)
+        (string))
+      (option_item
+        (identifier)
+        (array
+          (struct
+            (string)
+            (string)))))))
+
+================================================================================
+DDL: CREATE EXTENRAL TABLE
+================================================================================
+
+CREATE EXTERNAL TABLE dataset.CsvTable OPTIONS (
+  format = 'CSV',
+  uris = ['gs://bucket/path1.csv', 'gs://bucket/path2.csv']
+);
+
+CREATE EXTERNAL TABLE dataset.AutoHivePartitionedTable
+WITH PARTITION COLUMNS
+OPTIONS (
+  uris=['gs://bucket/path/*'],
+  format=csv,
+  hive_partition_uri_prefix='gs://bucket/path'
+);
+
+CREATE EXTERNAL TABLE dataset.CustomHivePartitionedTable
+WITH PARTITION COLUMNS (
+  field_1 STRING,
+  field_2 INT64
+)
+OPTIONS (
+  uris=['gs://bucket/path/*'],
+  format=csv,
+  hive_partition_uri_prefix='gs://bucket/path'
+);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_external_table_statement
+    (identifier)
+    (option_clause
+      (option_item
+        (identifier)
+        (string))
+      (option_item
+        (identifier)
+        (array
+          (string)
+          (string)))))
+  (create_external_table_statement
+    (identifier)
+    (partition_columns_clause)
+    (option_clause
+      (option_item
+        (identifier)
+        (array
+          (string)))
+      (option_item
+        (identifier)
+        (identifier))
+      (option_item
+        (identifier)
+        (string))))
+  (create_external_table_statement
+    (identifier)
+    (partition_columns_clause
+      (partition_columns
+        (column_definition
+          (identifier)
+          (column_type))
+        (column_definition
+          (identifier)
+          (column_type))))
+    (option_clause
+      (option_item
+        (identifier)
+        (array
+          (string)))
+      (option_item
+        (identifier)
+        (identifier))
+      (option_item
+        (identifier)
+        (string)))))
+
+================================================================================
+DDL: CREATE FUNCTION with SQL UDF
+================================================================================
+
+CREATE FUNCTION mydataset.multiplyInputs(x FLOAT64, y FLOAT64)
+RETURNS FLOAT64
+OPTIONS(language='SQL', library='mylib')
+AS (x * y);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_function_statement
+    (identifier)
+    (create_function_parameters
+      (create_function_parameter
+        (identifier)
+        (type))
+      (create_function_parameter
+        (identifier)
+        (type)))
+    (create_function_return_clause
+      (type))
+    (option_clause
+      (option_item
+        (identifier)
+        (string))
+      (option_item
+        (identifier)
+        (string)))
+    (create_function_body
+      (binary_expression
+        (identifier)
+        (identifier)))))
+
+================================================================================
+DDL: CREATE FUNCTION with Javascript UDF
+================================================================================
+
+CREATE TEMP FUNCTION multiplyInputs(x FLOAT64, y FLOAT64)
+RETURNS FLOAT64
+LANGUAGE js
+AS r"""
+  return x*y;
+""";
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_function_statement
+    (keyword_temporary)
+    (identifier)
+    (create_function_parameters
+      (create_function_parameter
+        (identifier)
+        (type))
+      (create_function_parameter
+        (identifier)
+        (type)))
+    (create_function_return_clause
+      (type))
+    (language)
+    (create_function_body
+      (string))))
+
+================================================================================
+DDL: CREATE FUNCTION with REMOTE PATH
+================================================================================
+
+CREATE FUNCTION mydataset.remoteMultiplyInputs(x FLOAT64, y FLOAT64)
+RETURNS FLOAT64
+REMOTE WITH CONNECTION us.myconnection
+OPTIONS(endpoint="https://us-central1-myproject.cloudfunctions.net/multiply");
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_remote_function_statement
+    (identifier)
+    (create_function_parameters
+      (create_function_parameter
+        (identifier)
+        (type))
+      (create_function_parameter
+        (identifier)
+        (type)))
+    (create_function_return_clause
+      (type))
+    (connection_path)
+    (option_clause
+      (option_item
+        (identifier)
+        (string)))))
+
+================================================================================
+DDL: TABLE FUNCTION
+================================================================================
+
+CREATE OR REPLACE TABLE FUNCTION mydataset.names_by_year(y INT64)
+RETURNS TABLE<name STRING, year INT64, total INT64>
+AS
+  SELECT year, name, SUM(number) AS total
+  FROM `bigquery-public-data.usa_names.usa_1910_current`
+  WHERE year = y
+  GROUP BY year, name
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_function_statement
+    (keyword_replace)
+    (identifier)
+    (create_table_function_parameters
+      (create_function_parameter
+        (identifier)
+        (type)))
+    (create_table_function_returns
+      (column_definition
+        (identifier)
+        (column_type))
+      (column_definition
+        (identifier)
+        (column_type))
+      (column_definition
+        (identifier)
+        (column_type)))
+    (create_table_function_body
+      (query_statement
+        (query_expr
+          (select
+            (select_list
+              (select_expression
+                (identifier))
+              (select_expression
+                (identifier))
+              (select_expression
+                (function_call
+                  (identifier)
+                  (argument
+                    (identifier)))
+                (as_alias
+                  (identifier))))
+            (from_clause
+              (from_item
+                (identifier)))
+            (where_clause
+              (binary_expression
+                (identifier)
+                (identifier)))
+            (group_by_clause
+              (grouping_item
+                (identifier))
+              (grouping_item
+                (identifier)))))))))
+
+================================================================================
+DDL: CREATE PROCEDURE
+================================================================================
+
+CREATE PROCEDURE myProject.myDataset.QueryTable()
+BEGIN
+  SELECT * FROM anotherDataset.myTable;
+END;
+
+CREATE PROCEDURE mydataset.AddDelta(INOUT x INT64, delta INT64)
+BEGIN
+END;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_procedure_statement
+    (identifier)
+    (procedure_parameters)
+    (procedure_body
+      (query_statement
+        (query_expr
+          (select
+            (select_list
+              (select_all
+                (asterisk_expression)))
+            (from_clause
+              (from_item
+                (identifier))))))))
+  (create_procedure_statement
+    (identifier)
+    (procedure_parameters
+      (procedure_argument
+        (identifier)
+        (type))
+      (procedure_argument
+        (identifier)
+        (type)))
+    (procedure_body)))
+
+================================================================================
+DDL: DROP SCEHMA Statements
+================================================================================
+
+DROP SCHEMA dataset_name;
+DROP SCHEMA IF EXISTS dataset_name;
+DROP SCHEMA dataset_name CASCADE;
+DROP SCHEMA dataset_name RESTRICT;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (drop_schema_statement
+    (identifier))
+  (drop_schema_statement
+    (keyword_if_exists)
+    (identifier))
+  (drop_schema_statement
+    (identifier)
+    (drop_schema_option))
+  (drop_schema_statement
+    (identifier)
+    (drop_schema_option)))
+
+================================================================================
+DDL: DROP TABLE/SNAPSHOT/VIEW/MATERIALIZED/VIEW Statements
+================================================================================
+
+DROP TABLE `dataset_name.table`;
+DROP TABLE IF EXISTS `dataset_name.table`;
+DROP VIEW dataset_name.view;
+DROP MATERIALIZED VIEW dataset_name.mview;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (drop_table_statement
+    (identifier))
+  (drop_table_statement
+    (keyword_if_exists)
+    (identifier))
+  (drop_table_statement
+    (identifier))
+  (drop_table_statement
+    (identifier)))
+
+================================================================================
+DDL: DROP TABLE FUNCTION Statements
+================================================================================
+
+DROP TABLE FUNCTION dataset_name.my_routine_name;
+DROP FUNCTION dataset_name.my_routine_name;
+DROP PROCEDURE dataset_name.my_routine_name;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (drop_table_function_statement
+    (identifier))
+  (drop_function_statement
+    (identifier))
+  (drop_procedure_statement
+    (identifier)))
+
+================================================================================
+DDL: ALTER SCHEMA on BigQuery Examples #1
+================================================================================
+
+ALTER SCHEMA mydataset
+SET OPTIONS(
+  default_table_expiration_days=3.75
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_schema_statement
+    (identifier)
+    (option_clause
+      (option_item
+        (identifier)
+        (number)))))
+
+================================================================================
+DDL: ALTER SCHEMA ADD REPLICA
+================================================================================
+
+ALTER SCHEMA cross_region_dataset
+ADD REPLICA `EU` OPTIONS(location=`eu`);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_schema_add_replica_statement
+    (identifier)
+    (identifier)
+    (option_clause
+      (option_item
+        (identifier)
+        (identifier)))))
+
+================================================================================
+DDL: ALTER SCHEMA DROP REPLICA
+================================================================================
+
+ALTER SCHEMA cross_region_dataset
+DROP REPLICA `us-east4`
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_schema_drop_replica_statement
+    (identifier)
+    (identifier)))
+
+================================================================================
+DDL: ALTER TABLE on BigQuery Examples #1
+================================================================================
+
+ALTER TABLE mydataset.mytable
+SET OPTIONS (
+  expiration_timestamp=TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 7 DAY),
+  description="Table that expires seven days from now"
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_table_statement
+    (identifier)
+    (option_clause
+      (option_item
+        (identifier)
+        (function_call
+          (identifier)
+          (argument
+            (function_call
+              (identifier)))
+          (argument
+            (interval
+              (number)
+              (datetime_part)))))
+      (option_item
+        (identifier)
+        (string)))))
+
+================================================================================
+DDL: ALTER TABLE COLUMN on BigQuery Examples #1
+================================================================================
+
+ ALTER TABLE mydataset.mytable
+  ADD COLUMN A STRING,
+  ADD COLUMN IF NOT EXISTS B GEOGRAPHY,
+  ADD COLUMN C ARRAY<NUMERIC>,
+  ADD COLUMN D DATE OPTIONS(description="my description")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (add_column_action
+        (column_definition
+          (identifier)
+          (column_type)))
+      (add_column_action
+        (keyword_if_not_exists)
+        (column_definition
+          (identifier)
+          (column_type)))
+      (add_column_action
+        (column_definition
+          (identifier)
+          (column_type)))
+      (add_column_action
+        (column_definition
+          (identifier)
+          (column_type)
+          (option_clause
+            (option_item
+              (identifier)
+              (string))))))))
+
+================================================================================
+DDL: ALTER TABLE RENAME TO on BigQuery Examples #1
+================================================================================
+
+ALTER TABLE mydataset.mytable RENAME TO mynewtable
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_table_rename_statement
+    (identifier)
+    (identifier)))
+
+================================================================================
+DDL: ALTER COLUMN SET OPTIONS on BigQuery Examples #1
+================================================================================
+
+ALTER TABLE mydataset.mytable
+ALTER COLUMN price
+SET OPTIONS (
+  description="Price per unit"
+);
+
+ALTER TABLE `canary.bikeshare_stations_hetero`
+  ALTER COLUMN `name` SET OPTIONS(description="description"),
+  ALTER COLUMN IF EXISTS `status` SET OPTIONS(description="description")
+;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (alter_column_action
+        (identifier)
+        (set_option
+          (option_clause
+            (option_item
+              (identifier)
+              (string)))))))
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (alter_column_action
+        (identifier)
+        (set_option
+          (option_clause
+            (option_item
+              (identifier)
+              (string)))))
+      (alter_column_action
+        (keyword_if_exists)
+        (identifier)
+        (set_option
+          (option_clause
+            (option_item
+              (identifier)
+              (string))))))))
+
+================================================================================
+DDL: ALTER RENAME COLUMN
+================================================================================
+
+ALTER TABLE canary.bikeshare_stations_blue
+  RENAME COLUMN `station_id` TO `hoge`,
+  RENAME COLUMN IF EXISTS `name` TO `hog2`
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (rename_column_action
+        (identifier)
+        (identifier))
+      (rename_column_action
+        (keyword_if_exists)
+        (identifier)
+        (identifier)))))
+
+================================================================================
+DDL: ALTER COLUMN DROP NOT NULL on BigQuery Examples #1
+================================================================================
+
+ALTER TABLE mydataset.mytable
+ALTER COLUMN mycolumn
+DROP NOT NULL
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (alter_column_action
+        (identifier)
+        (drop_notnull)))))
+
+================================================================================
+DDL: ALTER COLUMN SET DATA TYPE on BigQuery Examples #1
+================================================================================
+
+ALTER TABLE dataset.table
+ALTER COLUMN pt
+SET DATA TYPE NUMERIC(8,2);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (alter_column_action
+        (identifier)
+        (set_data_type
+          (column_type
+            (number)
+            (number)))))))
+
+================================================================================
+DDL: ALTER COLUMN SET DEFAULT syntax
+================================================================================
+
+ALTER TABLE mydataset.mytable
+ALTER COLUMN mycolumn1 SET DEFAULT CURRENT_TIME();
+
+ALTER TABLE mydataset.mytable
+ALTER COLUMN IF EXISTS mycolumn1 SET DEFAULT CURRENT_TIME(),
+ALTER COLUMN mycolumn2 SET DEFAULT CURRENT_TIME();
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (alter_column_action
+        (identifier)
+        (set_default
+          (function_call
+            (identifier))))))
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (alter_column_action
+        (keyword_if_exists)
+        (identifier)
+        (set_default
+          (function_call
+            (identifier))))
+      (alter_column_action
+        (identifier)
+        (set_default
+          (function_call
+            (identifier)))))))
+
+================================================================================
+DDL: ALTER COLUMN DROP DEFAULT syntax
+================================================================================
+
+ALTER TABLE mydataset.mytable
+ALTER COLUMN mycolumn DROP DEFAULT;
+
+ALTER TABLE mydataset.mytable
+ALTER COLUMN IF EXISTS mycolumn1 DROP DEFAULT,
+ALTER COLUMN mycolumn2 DROP DEFAULT;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (alter_column_action
+        (identifier)
+        (drop_default))))
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (alter_column_action
+        (keyword_if_exists)
+        (identifier)
+        (drop_default))
+      (alter_column_action
+        (identifier)
+        (drop_default)))))
+
+================================================================================
+DDL: PRIMARY KEY syntax
+================================================================================
+
+CREATE TABLE `mydataset.table` (
+    `x` INT64,
+    `y` INT64,
+    `z` INT64,
+    PRIMARY KEY (x, y) NOT ENFORCED
+);
+
+CREATE TABLE `mydataset.table` (
+    `x` INT64 PRIMARY KEY NOT ENFORCED,
+    `y` INT64,
+    `z` INT64
+);
+
+ALTER TABLE pk_table ADD PRIMARY KEY (x,y) NOT ENFORCED;
+ALTER TABLE myTable DROP PRIMARY KEY;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type))
+      (column_definition
+        (identifier)
+        (column_type))
+      (column_definition
+        (identifier)
+        (column_type))
+      (constraint_definition
+        (primary_key
+          (column_list
+            (identifier)
+            (identifier))
+          (constraint_enfoce_option)))))
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type)
+        (constraint_enfoce_option))
+      (column_definition
+        (identifier)
+        (column_type))
+      (column_definition
+        (identifier)
+        (column_type))))
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (add_primary_key_action
+        (primary_key
+          (column_list
+            (identifier)
+            (identifier))
+          (constraint_enfoce_option)))))
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (drop_primary_key_action))))
+
+================================================================================
+DDL: CONSTRAINT syntax
+================================================================================
+
+CREATE TABLE fk_table (
+    `x` INT64 REFERENCES primary_key_table(column_name) NOT ENFORCED,
+    `y` INT64,
+    `z` INT64
+);
+
+CREATE TABLE fk_table (
+    `x` INT64,
+    `y` INT64,
+    `z` INT64,
+    CONSTRAINT constraint_name FOREIGN KEY (x, y) REFERENCES primary_key_table(column_name) NOT ENFORCED,
+    FOREIGN KEY (x, y) REFERENCES primary_key_table(column_name) NOT ENFORCED
+);
+
+ALTER TABLE fk_table
+ADD CONSTRAINT my_fk_name FOREIGN KEY (u, v)
+REFERENCES pk_table(x, y) NOT ENFORCED;
+
+ALTER TABLE mytable DROP CONSTRAINT myConstraint;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type)
+        (foreign_key_references
+          (identifier)
+          (column_list
+            (identifier))
+          (constraint_enfoce_option)))
+      (column_definition
+        (identifier)
+        (column_type))
+      (column_definition
+        (identifier)
+        (column_type))))
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type))
+      (column_definition
+        (identifier)
+        (column_type))
+      (column_definition
+        (identifier)
+        (column_type))
+      (constraint_definition
+        (identifier)
+        (foreign_key
+          (column_list
+            (identifier)
+            (identifier))
+          (foreign_key_references
+            (identifier)
+            (column_list
+              (identifier))
+            (constraint_enfoce_option))))
+      (constraint_definition
+        (foreign_key
+          (column_list
+            (identifier)
+            (identifier))
+          (foreign_key_references
+            (identifier)
+            (column_list
+              (identifier))
+            (constraint_enfoce_option))))))
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (add_foreign_key_action
+        (identifier)
+        (foreign_key
+          (column_list
+            (identifier)
+            (identifier))
+          (foreign_key_references
+            (identifier)
+            (column_list
+              (identifier)
+              (identifier))
+            (constraint_enfoce_option))))))
+  (alter_table_column_statement
+    (identifier)
+    (alter_column_actions_list
+      (drop_constraint_action
+        (identifier)))))
+
+================================================================================
+DDL: DEFAULT option
+================================================================================
+
+CREATE TABLE mydataset.simple_table (
+  a STRING,
+  b STRING DEFAULT 'hello');
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type))
+      (column_definition
+        (identifier)
+        (column_type)
+        (default_clause
+          (string))))))
+
+================================================================================
+DDL: COLLATE options
+================================================================================
+
+CREATE SCHEMA `collate_table`
+DEFAULT COLLATE 'und:ci'
+;
+
+CREATE TABLE `collate_table`
+DEFAULT COLLATE 'und:ci'
+;
+
+CREATE TABLE `collate_table` (
+  case_insensitive_column STRING COLLATE 'und:ci'
+);
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (create_schema_statement
+    (identifier)
+    (default_collate_clause
+      (string)))
+  (create_table_statement
+    (identifier)
+    (default_collate_clause
+      (string)))
+  (create_table_statement
+    (identifier)
+    (create_table_parameters
+      (column_definition
+        (identifier)
+        (column_type)
+        (collate_clause
+          (string))))))

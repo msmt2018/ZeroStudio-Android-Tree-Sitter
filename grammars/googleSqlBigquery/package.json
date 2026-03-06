@@ -1,0 +1,67 @@
+{
+  "name": "tree-sitter-sql-bigquery",
+  "version": "0.8.0",
+  "description": "SQL grammar fom tree-sitter",
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "scripts": {
+    "test": "tree-sitter generate && tree-sitter test",
+    "gen": "tree-sitter generate",
+    "hl": "tree-sitter highlight",
+    "parse": "tree-sitter parse",
+    "fix": "deno fmt",
+    "build-wasm": "tree-sitter build --wasm",
+    "playground": "tree-sitter generate && rm -f tree-sitter-sql-bigquery.wasm && npm run build-wasm && tree-sitter playground",
+    "release": "tree-sitter test && ./.github/script/version",
+    "install": "node-gyp-build",
+    "prebuildify": "prebuildify --napi --strip"
+  },
+  "keywords": [
+    "parser",
+    "lexer",
+    "sql",
+    "bigquery"
+  ],
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
+  ],
+  "repository": "https://github.com/takegue/tree-sitter-sql-bigquery",
+  "author": "takegue <takegue@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "tree-sitter-cli": "^0.23.0",
+    "node-gyp-build": "^4.8.0",
+    "node-addon-api": "^8.0.0"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree_sitter": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "graphviz": "^0.0.9",
+    "prebuildify": "^6.0.0",
+    "prettier": "^3.0.0"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.sql",
+      "file-types": [
+        "sql",
+        "bqsql"
+      ],
+      "content-regex": "select|SELECT",
+      "highlights": [
+        "queries/highlights.scm"
+      ]
+    }
+  ]
+}

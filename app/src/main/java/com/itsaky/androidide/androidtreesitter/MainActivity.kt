@@ -37,14 +37,14 @@ import com.itsaky.androidide.treesitter.TSParser
 import com.itsaky.androidide.treesitter.TSQuery
 import com.itsaky.androidide.treesitter.TSTreeCursor
 import com.itsaky.androidide.treesitter.TreeSitter
-import com.itsaky.androidide.treesitter.java.TSLanguageJava
-import com.itsaky.androidide.treesitter.json.TSLanguageJson
-import com.itsaky.androidide.treesitter.kotlin.TSLanguageKotlin
-import com.itsaky.androidide.treesitter.log.TSLanguageLog
-import com.itsaky.androidide.treesitter.python.TSLanguagePython
+// import com.itsaky.androidide.treesitter.java.TSLanguageJava
+// import com.itsaky.androidide.treesitter.json.TSLanguageJson
+// import com.itsaky.androidide.treesitter.kotlin.TSLanguageKotlin
+// import com.itsaky.androidide.treesitter.log.TSLanguageLog
+// import com.itsaky.androidide.treesitter.python.TSLanguagePython
 import com.itsaky.androidide.treesitter.string.UTF16String
 import com.itsaky.androidide.treesitter.string.UTF16StringFactory
-import com.itsaky.androidide.treesitter.xml.TSLanguageXml
+// import com.itsaky.androidide.treesitter.xml.TSLanguageXml
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -92,19 +92,19 @@ class MainActivity : AppCompatActivity() {
     init {
       TreeSitter.loadLibrary()
 
-      System.loadLibrary("tree-sitter-java")
-      System.loadLibrary("tree-sitter-json")
-      System.loadLibrary("tree-sitter-kotlin")
-      System.loadLibrary("tree-sitter-log")
-      System.loadLibrary("tree-sitter-python")
-      System.loadLibrary("tree-sitter-xml")
+      // System.loadLibrary("tree-sitter-java")
+      // System.loadLibrary("tree-sitter-json")
+      // System.loadLibrary("tree-sitter-kotlin")
+      // System.loadLibrary("tree-sitter-log")
+      // System.loadLibrary("tree-sitter-python")
+      // System.loadLibrary("tree-sitter-xml")
 
-      languageMap["Java"] = TSLanguageJava.getInstance()
-      languageMap["JSON"] = TSLanguageJson.getInstance()
-      languageMap["Kotlin"] = TSLanguageKotlin.getInstance()
-      languageMap["Log"] = TSLanguageLog.getInstance()
-      languageMap["Python"] = TSLanguagePython.getInstance()
-      languageMap["XML"] = TSLanguageXml.getInstance()
+      // languageMap["Java"] = TSLanguageJava.getInstance()
+      // languageMap["JSON"] = TSLanguageJson.getInstance()
+      // languageMap["Kotlin"] = TSLanguageKotlin.getInstance()
+      // languageMap["Log"] = TSLanguageLog.getInstance()
+      // languageMap["Python"] = TSLanguagePython.getInstance()
+      // languageMap["XML"] = TSLanguageXml.getInstance()
     }
 
     private fun StringBuilder.repeatKt(text: String, indent: Int
@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
     activityScope.launch {
       highlightsKtScm().use { string ->
         val start = System.currentTimeMillis()
-        TSQuery.create(TSLanguageKotlin.getInstance(), string.toString())
+        // TSQuery.create(TSLanguageKotlin.getInstance(), string.toString())
         Log.d(TAG,
           "onCreate: TSQuery for Kotlin created in ${System.currentTimeMillis() - start}ms")
       }
@@ -272,7 +272,7 @@ class MainActivity : AppCompatActivity() {
 
   @Suppress("DEPRECATION")
   private fun doParserPerfTest(iterations: Int) {
-    val language = TSLanguageJava.getInstance()
+    // val language = ProgressDialog(this)
 
     val progress = ProgressDialog(this)
     progress.setMessage("Please wait")
@@ -289,7 +289,7 @@ class MainActivity : AppCompatActivity() {
           pd.setTitle(R.string.test_parser_performance)
           pd.setCancelable(false)
           pd.setMessage("""
-            Language: ${language.name}
+
             Iterations: $iterations
             File size: ${String.format("%.2f", size.toDouble() / 1024)} KB
             File line count: $lineCount
@@ -308,7 +308,7 @@ class MainActivity : AppCompatActivity() {
           repeat(iterations) {
             emit(async {
               TSParser.create().use { parser ->
-                parser.language = language
+                // parser.language = language
                 val start = System.currentTimeMillis()
                 parser.parseString(input)
                   .use { /* auto-close the returned tree */ }
@@ -330,7 +330,7 @@ class MainActivity : AppCompatActivity() {
         withContext(Dispatchers.Main) {
           pd.dismiss()
           showPerfTestResult("""
-            Language : ${language.name}
+
             Iterations : $iterations
             File size : ${String.format("%.2f", size.toDouble() / 1024)} KB
             File line count: $lineCount

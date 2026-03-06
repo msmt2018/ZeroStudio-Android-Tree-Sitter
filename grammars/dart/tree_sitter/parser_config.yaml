@@ -1,0 +1,8 @@
+name: "TSParser"
+description: "C Bindings to the TreeSitter Parser library"
+output: 'lib/src/parser_generated_bindings.dart'
+headers:
+  entry-points:
+    - 'tree-sitter/lib/src/parser.h'
+  include-directives:
+    - 'tree-sitter/lib/src/parser.h'

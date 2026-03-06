@@ -1,0 +1,62 @@
+================================
+Immediate addressing
+================================
+mov r0, #1234
+--------------------------------
+(program
+  (instruction
+    (identifier)
+    (regs
+      (identifier))
+    (int)))
+================================
+Register addressing
+================================
+mov r0, r1
+--------------------------------
+(program
+  (instruction
+    (identifier)
+    (regs
+      (identifier))
+    (regs
+      (identifier))))
+================================
+Base-plus-offset addressing
+================================
+ ldr r0, [r1, #-4]
+--------------------------------
+(program
+  (instruction
+    (identifier)
+    (regs
+      (identifier))
+    (regs
+      (identifier)
+      (int))))
+================================
+Register indirect addressing
+================================
+ ldr r0, [r1]
+--------------------------------
+(program
+  (instruction
+    (identifier)
+    (regs
+      (identifier))
+    (regs
+      (identifier)
+      )))
+================================
+Multi-register addressing
+================================
+ ldr r0, {r1, r2}
+--------------------------------
+(program
+  (instruction
+    (identifier)
+    (regs
+      (identifier))
+    (regs
+      (identifier)
+      (identifier))))

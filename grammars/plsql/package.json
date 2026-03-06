@@ -1,0 +1,71 @@
+{
+  "name": "tree-sitter-plsqloracle",
+  "version": "0.1.0",
+  "description": "PL/SQL with Oracle flavor",
+  "repository": "https://github.com/tree-sitter/tree-sitter-plsqloracle",
+  "license": "MIT",
+  "author": {
+    "name": "Vinícius Sugimoto",
+    "email": "vtmsugimoto@gmail.com",
+    "url": "https://github.com/vinicius-toshiyu"
+  },
+  "exports": {
+    ".": "./bindings/node/index.js",
+    "./grammar-constants": "./bindings/node/grammar-constants.js"
+  },
+  "types": "bindings/node",
+  "keywords": [
+    "incremental",
+    "parsing",
+    "tree-sitter",
+    "plsqloracle"
+  ],
+  "files": [
+    "grammar.js",
+    "build-constants.js",
+    "grammar-constants.js",
+    "grammar-constants.d.ts",
+    "tree-sitter.json",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**",
+    "*.wasm"
+  ],
+  "dependencies": {
+    "node-addon-api": "^8.2.1",
+    "node-gyp-build": "^4.8.2"
+  },
+  "devDependencies": {
+    "prebuildify": "^6.0.1",
+    "tree-sitter-cli": "^0.25.6"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.25.0"
+  },
+  "peerDependenciesMeta": {
+    "tree-sitter": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "build": "tree-sitter generate && tree-sitter build && rm -r build && npm run install",
+    "build:constants": "node build-constants.js src/grammar.json",
+    "install": "node-gyp-build && npm run build:constants",
+    "prestart": "tree-sitter build --wasm",
+    "start": "tree-sitter playground",
+    "test": "node --test bindings/node/*_test.js"
+  },
+  "tree-sitter": {
+    "scope": "source.plsqloracle",
+    "file-types": [
+      "plsql",
+      "plsqltemplate"
+    ],
+    "injection-regex": "plsqloracle",
+    "highlights": [
+      "queries/highlights.scm"
+    ]
+  }
+}

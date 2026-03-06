@@ -1,5 +1,5 @@
-> [!WARNING]
-> 
+>[+Build Source]
+> [ZeroStudio](https://github.com/msmt2018/ZeroStudio/tree/main/editor/tree-sitter-ndk)
 > THIS PROJECT IS NOT MAINTAINED ANYMORE. 
 
 # android-tree-sitter

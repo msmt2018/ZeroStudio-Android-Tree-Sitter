@@ -1,46 +1,224 @@
 [
+  // {
+    // "name": "c",
+    // "src.extra": []
+  // },
+  // {
+    // "name": "cpp",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "aidl",
+    // "src.extra": []
+  // },
+  // {
+    // "name": "java",
+    // "src.extra": []
+  // },
+  // {
+    // "name": "json",
+    // "src.extra": []
+  // },
+  // {
+    // "name": "kotlin",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "log",
+    // "src.extra": []
+  // },
+  // {
+    // "name": "properties",
+    // "src.extra": []
+  // },
+  // {
+    // "name": "python",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "toml",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "cmake",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "smali",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
   {
-    "name": "c",
-    "src.extra": []
-  },
-  {
-    "name": "cpp",
+    "name": "markdown",
     "src.extra": [
       "src/scanner.c"
     ]
   },
-  {
-    "name": "aidl",
-    "src.extra": []
-  },
-  {
-    "name": "java",
-    "src.extra": []
-  },
-  {
-    "name": "json",
-    "src.extra": []
-  },
-  {
-    "name": "kotlin",
-    "src.extra": [
-      "src/scanner.c"
-    ]
-  },
-  {
-    "name": "log",
-    "src.extra": []
-  },
-  {
-    "name": "properties",
-    "src.extra": []
-  },
-  {
-    "name": "python",
-    "src.extra": [
-      "src/scanner.c"
-    ]
-  },
+  // {
+    // "name": "yaml",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "vue",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "sql",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "rust",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "proto",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "php",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "swift",
+    // "src.extra": []
+  // },
+  // {
+    // "name": "objectiveCpp",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "objectiveC",
+    // "src.extra": []
+  // },
+  // {
+    // "name": "lua",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "go",
+    // "src.extra": []
+  // },
+  // {
+    // "name": "css",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // // {
+    // // "name": "bash",
+    // // "src.extra": [
+      // // "src/scanner.c"
+    // // ]
+  // // },
+  // {
+    // "name": "proto",
+    // "src.extra": []
+  // },
+  // {
+    // "name": "javascript",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "reStructuredText",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "sqlite",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "plsql",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "arm",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "arm64",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "asm",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "masm",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "nasm",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "dart",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "flutter",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "groovy",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
+  // {
+    // "name": "typeScript",
+    // "src.extra": [
+      // "src/scanner.c"
+    // ]
+  // },
   {
     "name": "xml",
     "src.extra": []

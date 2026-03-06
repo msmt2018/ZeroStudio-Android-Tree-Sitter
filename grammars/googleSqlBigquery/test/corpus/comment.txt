@@ -1,0 +1,88 @@
+================================================================================
+Comment
+================================================================================
+
+-- Smile and wave
+# Smile and wave
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (comment))
+
+
+================================================================================
+Multiline comment
+================================================================================
+
+/*
+Smile and wave
+*/
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment))
+
+==================
+COMMENT: Can parse comments
+==================
+
+-- hello
+SELECT 1;
+
+---
+
+(source_file
+  (comment)
+  (query_statement
+    (query_expr
+      (select
+        (select_list
+          (select_expression
+            (number)))))))
+
+==================
+COMMENT: Can parse comments anywhere...
+==================
+
+-- hello
+SELECT 1; --hi
+--hi
+
+---
+
+(source_file
+  (comment)
+  (query_statement
+  (query_expr
+    (select
+    (select_list
+      (select_expression
+      (number))))))
+  (comment)
+  (comment))
+
+==================
+Simple marginalia
+==================
+
+/* application=super-app */
+SELECT id /* MAX_EXECUTION_TIME(500) */
+FROM my_table;
+
+---
+
+(source_file
+  (comment)
+  (query_statement
+  (query_expr
+    (select
+    (select_list
+      (select_expression
+      (identifier)))
+    (comment)
+    (from_clause
+      (from_item
+      (identifier)))))))
